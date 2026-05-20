@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "ws2812"
+		},
+		{
+			"path": "esp32_cli"
 		}
 	],
 	"settings": {}

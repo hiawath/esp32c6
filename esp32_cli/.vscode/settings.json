@@ -1,0 +1,18 @@
+{
+  "idf.currentSetup": "/Users/andrew/.espressif/v6.0.1/esp-idf",
+  "idf.openOcdConfigs": [
+    "board/esp32c6-ftdi.cfg"
+  ],
+  "idf.customExtraVars": {
+    "IDF_TARGET": "esp32c6"
+  },
+  "clangd.path": "/Users/andrew/.espressif/tools/esp-clang/esp-20.1.1_20250829/esp-clang/bin/clangd",
+  "clangd.arguments": [
+    "--background-index",
+    "--query-driver=**",
+    "--compile-commands-dir=/Users/andrew/esp32-project/esp32c6/esp32_cli/build"
+  ],
+  "idf.flashType": "UART",
+  "idf.port": "/dev/tty.usbmodem5B8E0754891",
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json"
+}
