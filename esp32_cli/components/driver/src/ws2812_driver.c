@@ -13,7 +13,7 @@ esp_err_t ws2812_driver_init(int gpio_num, int led_count)
     led_strip_config_t strip_config = {
         .strip_gpio_num = gpio_num,
         .max_leds = led_count,
-        .led_pixel_format = LED_PIXEL_FORMAT_GRB, // ESP32-C6 온보드 WS2812는 통상 GRB 포맷입니다.
+        .color_component_format = LED_STRIP_COLOR_COMPONENT_FMT_GRB, // ESP32-C6 온보드 WS2812는 통상 GRB 포맷입니다.
         .led_model = LED_MODEL_WS2812,            // WS2812 모델 지정
         .flags.invert_out = false,
     };

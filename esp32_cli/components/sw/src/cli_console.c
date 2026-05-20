@@ -41,7 +41,7 @@ static const char* channel_name(led_channel_t channel)
 static int do_led_on_cmd(int argc, char **argv)
 {
     if (argc < 2) {
-        printf("Usage: led_on <r|g|b|w|all> [brightness(0-255)]\n");
+        printf("Usage: led_on <r|g|b|w|all> [brightness(0-255)] [blink_delay_ms]\n");
         return 1;
     }
 
@@ -61,10 +61,28 @@ static int do_led_on_cmd(int argc, char **argv)
         brightness = val;
     }
 
-    led_control_set_channel(channel, true, brightness);
-    led_control_apply();
+    uint32_t blink_delay_ms = 0; // 0 means no blink
+    if (argc >= 4) {
+        int val = atoi(argv[3]);
+        if (val < 0) {
+            printf("Error: Blink delay must be positive.\n");
+            return 1;
+        }
+        blink_delay_ms = val;
+    }
 
-    printf("LED %s channel ON (brightness: %d)\n", channel_name(channel), brightness);
+    esp_err_t err = led_control_send_cmd(channel, true, brightness, blink_delay_ms);
+    if (err != ESP_OK) {
+        printf("Error: Failed to send ON command to queue\n");
+        return 1;
+    }
+
+    if (blink_delay_ms > 0) {
+        printf("LED %s channel ON request sent (brightness: %d, blink delay: %lu ms)\n", 
+               channel_name(channel), brightness, blink_delay_ms);
+    } else {
+        printf("LED %s channel ON request sent (brightness: %d)\n", channel_name(channel), brightness);
+    }
     return 0;
 }
 
@@ -82,10 +100,13 @@ static int do_led_off_cmd(int argc, char **argv)
         return 1;
     }
 
-    led_control_set_channel(channel, false, 0);
-    led_control_apply();
+    esp_err_t err = led_control_send_cmd(channel, false, 0, 0);
+    if (err != ESP_OK) {
+        printf("Error: Failed to send OFF command to queue\n");
+        return 1;
+    }
 
-    printf("LED %s channel OFF\n", channel_name(channel));
+    printf("LED %s channel OFF request sent\n", channel_name(channel));
     return 0;
 }
 
@@ -129,7 +150,7 @@ esp_err_t cli_console_start(void)
     const esp_console_cmd_t led_on_cmd = {
         .command = "led_on",
         .help = "Turn on LED channel (r, g, b, w, all)",
-        .hint = "<r|g|b|w|all> [brightness(0-255)]",
+        .hint = "<r|g|b|w|all> [brightness(0-255)] [blink_delay_ms]",
         .func = &do_led_on_cmd,
     };
     ESP_ERROR_CHECK(esp_console_cmd_register(&led_on_cmd));
