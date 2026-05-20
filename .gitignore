@@ -1,0 +1,15 @@
+# ESP-IDF 빌드 결과물
+**/build/
+**/.cache/
+
+# --- ESP-IDF 설정 파일 ---
+# sdkconfig는 로컬 환경에 따라 달라질 수 있으므로 제외하고,
+# 대신 공유가 필요한 설정은 sdkconfig.defaults를 만들어 관리함
+**/sdkconfig
+**/sdkconfig.old
+
+# 의존성 (Component Manager가 다시 받음)
+**/managed_components/
+**/dependencies.lock
+
+**/.vscode/c_cpp_properties.json
