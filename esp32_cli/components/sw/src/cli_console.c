@@ -6,6 +6,28 @@
 #include "esp_log.h"
 #include "led_control.h"
 
+// 텔넷 세션용 글로벌 스트림 변수 정의
+FILE *g_telnet_stdout = NULL;
+
+// 래퍼 프린트 함수 구현
+int cli_printf(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    int ret;
+    if (g_telnet_stdout != NULL) {
+        ret = vfprintf(g_telnet_stdout, format, args);
+        fflush(g_telnet_stdout);
+    } else {
+        ret = vprintf(format, args);
+    }
+    va_end(args);
+    return ret;
+}
+
+// 이후 cli_console.c 내의 모든 printf 호출을 cli_printf로 리디렉션
+#define printf(...) cli_printf(__VA_ARGS__)
+
 static const char *TAG = "cli_console";
 
 // r, g, b, w, all 문자열을 led_channel_t로 매핑하는 헬퍼 함수

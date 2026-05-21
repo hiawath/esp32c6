@@ -1,0 +1,25 @@
+menu "WiFi Connection Settings"
+
+    config ESP_WIFI_SSID
+        string "WiFi SSID"
+        default "your_wifi_ssid"
+        help
+            SSID of the WiFi network to connect to.
+
+    config ESP_WIFI_PASSWORD
+        string "WiFi Password"
+        default "your_wifi_password"
+        help
+            Password of the WiFi network to connect to.
+
+endmenu
+
+menu "Telnet Console Settings"
+
+    config ESP_TELNET_PORT
+        int "Telnet Port"
+        default 23
+        help
+            TCP port for the remote Telnet CLI server.
+
+endmenu

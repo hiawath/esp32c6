@@ -3,6 +3,8 @@
 #include "nvs_flash.h"
 #include "led_control.h"
 #include "cli_console.h"
+#include "wifi_app.h"
+#include "telnet_server.h"
 
 // ESP32-C6-DevKitC-1 온보드 RGB LED(WS2812) GPIO 번호
 #define ONBOARD_LED_GPIO_NUM 8
@@ -33,6 +35,17 @@ void app_main(void)
     if (ret != ESP_OK) {
         ESP_LOGE(TAG, "Failed to start CLI console: %s", esp_err_to_name(ret));
         return;
+    }
+
+    // 3. WiFi 및 Telnet 서버 기동
+    ret = wifi_app_init();
+    if (ret != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize WiFi: %s", esp_err_to_name(ret));
+    } else {
+        ret = telnet_server_start();
+        if (ret != ESP_OK) {
+            ESP_LOGE(TAG, "Failed to start Telnet Server: %s", esp_err_to_name(ret));
+        }
     }
 
     ESP_LOGI(TAG, "Initialization complete.");
