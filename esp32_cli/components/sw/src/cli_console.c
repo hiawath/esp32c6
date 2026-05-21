@@ -16,7 +16,16 @@ int cli_printf(const char *format, ...)
     va_start(args, format);
     int ret;
     if (g_telnet_stdout != NULL) {
-        ret = vfprintf(g_telnet_stdout, format, args);
+        char buf[256];
+        ret = vsnprintf(buf, sizeof(buf), format, args);
+        for (int i = 0; buf[i] != '\0'; i++) {
+            if (buf[i] == '\n') {
+                if (i == 0 || buf[i - 1] != '\r') {
+                    fputc('\r', g_telnet_stdout);
+                }
+            }
+            fputc(buf[i], g_telnet_stdout);
+        }
         fflush(g_telnet_stdout);
     } else {
         ret = vprintf(format, args);

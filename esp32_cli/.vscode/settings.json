@@ -14,5 +14,6 @@
   ],
   "idf.flashType": "UART",
   "idf.port": "/dev/tty.usbmodem5B8E0754891",
-  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json"
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/compile_commands.json",
+  "idf.monitorNoReset": true
 }
